@@ -72,6 +72,7 @@ onMounted(() => {
       <form @submit.prevent="addTodo">
         <h4>What's on your todo list?</h4>
         <input
+          maxlength="20"
           type="text"
           placeholder="E.g. Make a new project with PHP"
           v-model="input_content"
