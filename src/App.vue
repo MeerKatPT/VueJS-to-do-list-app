@@ -13,7 +13,7 @@ const input_category = ref(null);
 // give back an ascending list by date
 const todos_asc = computed(() =>
   todos.value.sort((a, b) => {
-    return b.createdAt - a.createdAt;
+    return a.createdAt - b.createdAt;
   })
 );
 
@@ -30,6 +30,13 @@ const addTodo = () => {
     done: false,
     createdAt: new Date().getTime(),
   });
+  // reset values after adding a todo
+  input_content.value = "";
+  input_category.value = null;
+};
+
+const removeTodo = (todo) => {
+  todos.value = todos.value.filter((t) => t !== todo);
 };
 
 //watching changes in the "todos" and updates the local storage with the new value
@@ -98,14 +105,23 @@ onMounted(() => {
     <section class="todo-list">
       <h3>TODO LIST</h3>
       <div class="list">
+        <!-- iterate over the array todo with v-for to render the items -->
         <div
           v-for="todo in todos_asc"
           :class="`todo-item ${todo.done && 'done'}`"
-        ></div>
-        <label>
-          <input type="checkbox" v-model="todo.done" />
-          <span :class="`bubble ${todo.category}`"></span>
-        </label>
+        >
+          <label>
+            <input type="checkbox" v-model="todo.done" />
+            <span :class="`bubble ${todo.category}`"> </span>
+          </label>
+          <div class="todo-content">
+            <input type="text" v-model="todo.content" />
+          </div>
+
+          <div class="actions">
+            <button class="delete" @click="removeTodo(todo)">Delete</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>
